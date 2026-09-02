@@ -1,0 +1,21 @@
+services:
+  minio:
+    image: minio/minio
+    # اسم الخدمة داخل شبكة Docker
+    container_name: minio_server
+    # إعادة التشغيل دائمًا لضمان استمرار الخدمة
+    restart: always
+    ports:
+      # المنفذ الذي ستصل منه إلى لوحة تحكم MinIO عبر المتصفح
+      - "9000:9000"
+      # المنفذ الافتراضي للـ API
+      - "9001:9001"
+    environment:
+      # اسم المستخدم للوصول إلى MinIO (Access Key)
+      MINIO_ROOT_USER: minioadmin
+      # كلمة المرور للوصول إلى MinIO (Secret Key)
+      MINIO_ROOT_PASSWORD: minioadminpassword
+    volumes:
+      # ربط مسار محلي على جهازك بمسار التخزين داخل MinIO
+      - ./minio_storage:/data
+    command: server /data --console-address ":9001"
